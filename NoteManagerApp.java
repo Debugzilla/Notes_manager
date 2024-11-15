@@ -49,6 +49,7 @@ public class NoteManagerApp {
                     break;
                 case 6:
                     System.out.println("6. Has seleccionado guardar a la base de datos");
+                    NoteManager.saveToDatabase(scanner);
                     break;
                 case 7:
                     System.out.println("7. Has seleccionado cargar de la base de datos");

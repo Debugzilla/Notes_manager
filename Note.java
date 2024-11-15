@@ -21,7 +21,7 @@ public class Note { // Creamos la clase Note
     //Para title: Crear getTitle y setTitle.
     // Getter y setter para 'nombre'
     public String getTitle() {
-        return title;
+        return title != null ? title : "Título vacío"; //valor por defecto si es null
     }
 
     public void setTitle(String title) {
@@ -31,7 +31,7 @@ public class Note { // Creamos la clase Note
     //Para content: Crear getContent y setContent.
 
     public String getContent() {
-        return content;
+        return content != null ? content : "Contenido vacío"; //valor por defecto si es null
     }
 
     public void setContent(String content) {
@@ -41,7 +41,8 @@ public class Note { // Creamos la clase Note
     //Para category: Crear getCategory y setCategory.
 
     public String getCategory() {
-        return category;
+        return category != null ? category : "Categoría vacía"; //valor por defecto si es null
+
     }
 
     public void setCategory(String category) {

@@ -1,7 +1,13 @@
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
 
 public class NoteManager {
     //Esta clase será responsable de gestionar las notas.
@@ -198,7 +204,83 @@ public class NoteManager {
         }
 
 
+
     }
+
+    public static void saveToDatabase(Scanner scanner) {
+        Connection connection = null;
+
+        try {
+            // Registrar el controlador JDBC para SQLite
+            Class.forName("org.sqlite.JDBC"); // Carga el controlador JDBC de SQLite
+
+            // URL de conexión a la base de datos SQLite
+            String url = "jdbc:sqlite:notas.db"; // Asegúrate de que el prefijo sea "jdbc:sqlite:"
+
+            // Establecer la conexión con la base de datos
+            connection = DriverManager.getConnection(url);
+            connection.setAutoCommit(false); // Deshabilitar autocommit
+            System.out.println("Conectando a la base de datos en: " + url);
+
+            // Imprimir el tamaño de la lista de notas
+            System.out.println("Número de notas a insertar: " + notes.size());
+
+            // Preparar la sentencia SQL parametrizada para insertar notas
+            String InsertSQL = "INSERT INTO notes (title, content, category) VALUES (?, ?, ?);";
+
+            // Preparar la sentencia SQL utilizando la conexión a la base de datos
+            PreparedStatement preparedStatement = connection.prepareStatement(InsertSQL);
+
+            // Iterar sobre las notas que se van a insertar
+            for (Note note : notes) {
+                // Verifica que los valores no sean null
+                if (note.getTitle() == null || note.getContent() == null || note.getCategory() == null) {
+                    System.out.println("Algunos valores son NULL. No se insertará esta nota.");
+                    continue;
+                }
+
+                // Asignar valores a los parámetros de la sentencia
+                preparedStatement.setString(1, note.getTitle());  // Parámetro 1: Título
+                preparedStatement.setString(2, note.getContent()); // Parámetro 2: Contenido
+                preparedStatement.setString(3, note.getCategory()); // Parámetro 3: Categoría
+                System.out.println("Insertando nota: " + note.getTitle() + ", " + note.getContent() + ", " + note.getCategory());
+
+                // Ejecutar la sentencia SQL para insertar la nota
+                preparedStatement.executeUpdate();
+            }
+
+            // Commit después de todas las inserciones
+            connection.commit();
+            System.out.println("Notas guardadas correctamente en la base de datos.");
+
+            // Cerrar el objeto PreparedStatement después de su uso
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            System.err.println("Error al guardar la nota en la base de datos: " + e.getMessage());
+            try {
+                if (connection != null) {
+                    connection.rollback();  // Revertir cambios si hay error
+                    System.out.println("Rollback realizado.");
+                }
+            } catch (SQLException rollbackEx) {
+                System.err.println("Error al hacer rollback: " + rollbackEx.getMessage());
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error al cargar el controlador JDBC: " + e.getMessage());
+        } finally {
+            // Cerrar la conexión
+            try {
+                if (connection != null) {
+                    connection.close();
+                    System.out.println("Conexión cerrada.");
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar la conexión: " + e.getMessage());
+            }
+        }
+    }
+
 
 }
 
