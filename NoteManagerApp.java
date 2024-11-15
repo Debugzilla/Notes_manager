@@ -45,6 +45,7 @@ public class NoteManagerApp {
                     break;
                 case 5:
                     System.out.println("5. Has selecionado ver notas por categoria");
+                    NoteManager.viewNotesByCategory(scanner);
                     break;
                 case 6:
                     System.out.println("6. Has seleccionado guardar a la base de datos");
@@ -72,7 +73,7 @@ public class NoteManagerApp {
         System.out.println("2. Editar notas");
         System.out.println("3. Eliminar notas");
         System.out.println("4. Ver notas");
-        System.out.println("5. Ver notas por categoria");
+        System.out.println("5. Ver notas por categoría");
         System.out.println("6. Guardar a la base de datos");
         System.out.println("7. Cargar de la base de datos");
         System.out.println("0. Salir del programa");

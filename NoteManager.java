@@ -155,6 +155,47 @@ public class NoteManager {
         System.out.println("No hay notas disponibles");
         }
 
+    }
+
+    // Método para buscar una nota por su título
+    private static Note findNoteByCategory(String category) {
+        for (Note note : notes) {
+            if (note.getCategory().equalsIgnoreCase(category)) {
+                return note;
+            }
+        }
+        return null; // Retorna null si no encuentra la nota
+
+    }
+
+
+
+    public static void viewNotesByCategory(Scanner scanner){
+        //Método para ver notas por categoría en NoteManager (opcional)
+        boolean found = false;
+
+        //Pedir al usuario una categoría.
+        System.out.println("Introduce la categoria: ");
+        scanner.nextLine();
+        String category = scanner.nextLine();
+
+        //Si la lista de notas está vacía:
+        if(notes != null && !notes.isEmpty()) {
+            for (Note nota : notes) {
+                if (nota.getCategory().equals(category)) {
+                    System.out.println("Las notas coincidentes con la categoría " + category + ":");
+                    System.out.println(nota);
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                System.out.println("No se encontraron notas con la categoría " + category);
+            }
+        }else{
+            System.out.println("La lista de notas está vacía");
+
+        }
 
 
     }
