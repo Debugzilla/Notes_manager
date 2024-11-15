@@ -10,7 +10,7 @@ public class Note { // Creamos la clase Note
 
 
     // Definimos el constructor para inicializar una nota
-    public Note(String title, String content, String category, LocalDate date) {
+    public Note(String title, String content, String category) {
         this.title = title;
         this.content = content;
         this.category = category;

@@ -53,6 +53,7 @@ public class NoteManagerApp {
                     break;
                 case 7:
                     System.out.println("7. Has seleccionado cargar de la base de datos");
+                    NoteManager.loadFromDatabase(scanner);
                     break;
                 case 0:
                     System.out.println("0. Saliendo del programa....");
@@ -82,23 +83,6 @@ public class NoteManagerApp {
 
         }
 
-
-
     }
 
 
-
-
-
-//Llamar al método displayMenu() para mostrar las opciones del menú.
-
-//Leer la opción seleccionada y ejecutar la acción correspondiente usando una estructura condicional switch:
-
-
-
-//Si la opción es 4, llamar al método viewNotes() de noteManager.
-//Si la opción es 5, llamar a viewNotesByCategory() para mostrar notas por categoría.
-//Si la opción es 6, llamar a saveToDatabase() para guardar en la base de datos.
-//Si la opción es 7, llamar a loadFromDatabase() para cargar desde la base de datos.
-//Si la opción es 0, establecer exit en true para salir del bucle.
-//En caso de una opción no válida, mostrar un mensaje de error.

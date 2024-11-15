@@ -14,10 +14,13 @@ public class NoteManager {
 
     private static List<Note> notes; // Lista para almacenar las notas
 
+
+
     //constructor
     public NoteManager() {
         //Inicializacion de la lista de notas
         notes = new ArrayList<>();
+
     }
 
 
@@ -50,7 +53,7 @@ public class NoteManager {
         LocalDate date = LocalDate.now();
 
         // Crear una nueva instancia de Note:
-        Note newNote = new Note(title, content, category, date);
+        Note newNote = new Note(title, content, category);
 
         // Agregar la nota a la lista de notas
         notes.add(newNote);
@@ -145,16 +148,12 @@ public class NoteManager {
 
     }
     public static void viewNotes(Scanner scanner){
-
-
         //Si la lista de notas está vacía:
         if(notes != null && !notes.isEmpty()){
             for(Note nota : notes){
                 System.out.println("Titulo: "+nota.getTitle());
                 System.out.println("Contenido: "+nota.getContent());
                 System.out.println("Categoria: "+nota.getCategory());
-
-
             }
 
         }else{
@@ -173,8 +172,6 @@ public class NoteManager {
         return null; // Retorna null si no encuentra la nota
 
     }
-
-
 
     public static void viewNotesByCategory(Scanner scanner){
         //Método para ver notas por categoría en NoteManager (opcional)
@@ -281,6 +278,67 @@ public class NoteManager {
         }
     }
 
+    public static void loadFromDatabase(Scanner scanner) {
+        Connection connection = null;
+        ResultSet resultSet = null;
+        Statement statement = null;
+        List<Note> notasCargadas = new ArrayList<>(); // Lista para almacenar las notas cargadas
+
+        try {
+            // Registrar el controlador JDBC para SQLite
+            Class.forName("org.sqlite.JDBC");
+
+            // URL de conexión a la base de datos SQLite
+            String url = "jdbc:sqlite:notas.db";
+
+            // Establecer la conexión con la base de datos
+            connection = DriverManager.getConnection(url);
+            System.out.println("Conexión establecida con: " + url);
+
+            // Preparar la sentencia SQL para obtener notas
+            String ResultSQL = "SELECT title, content, category FROM notes";
+
+            // Crear el statement
+            statement = connection.createStatement();
+
+            // Ejecutar la consulta y recoger los resultados
+            resultSet = statement.executeQuery(ResultSQL);
+
+            // Iterar sobre los resultados del resultSet
+            while (resultSet.next()) {
+                // Leer los valores de las columnas
+                String title = resultSet.getString("title");
+                String content = resultSet.getString("content");
+                String category = resultSet.getString("category");
+                //LocalDate date = resultSet.getDate("date").toLocalDate(); // Convertir a LocalDate
+
+                // Crear un nuevo objeto Note
+                Note note = new Note(title, content, category);
+
+                // Agregar el objeto Note a la lista notascargadas
+                notasCargadas.add(note);
+            }
+
+            // Mostrar las notas cargadas
+            for (Note note : notasCargadas) {
+                System.out.println(note);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Cerrar recursos
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }
+
 
